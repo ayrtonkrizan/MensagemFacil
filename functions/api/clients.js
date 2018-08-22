@@ -35,6 +35,7 @@ app.post('/clients', (req, res) =>{ //Quando tiverem varios numeros para enviar 
     db.client_insert(client)
         .then((ret) => res.status(200).json(ret.msg))
         .catch((err) => res.status(500).json(err.msg));
+    
 });
 
 app.get('/clients/:cpf', (req, res) =>{

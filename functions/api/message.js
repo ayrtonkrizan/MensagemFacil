@@ -14,12 +14,31 @@ app.post('/message', (req, res) =>{
     
     var message={};
     message = {
+        client: client,
         phones: req.body.telefones,
         text: req.body.mensagem,
         sent: false
     }
+    
+    var newDate = new Date();
+    var lastDate = new Date(client.lastMessage);
     db.message_insert(message)
-        .then((ret) => res.status(200).json(ret.msg))
+        .then((ret) => {
+            
+            if(newDate.getMonth() !== lastDate.getMonth() || newDate.getFullYear() !== lastDate.getFullYear())
+                client.monthMessages = 1;
+            else
+                client.monthMessages = client.monthMessages+ 1;
+            
+            client.totalMessages = client.totalMessages+ 1;
+            client.lastMessage = newDate.getTime();
+
+            db.client_insert(client)
+                .then( ret => console.log(ret))
+                .catch( ret => console.log(ret));
+
+            return res.status(200).json(ret.msg);
+        })
         .catch((err) => res.status(500).json(err.msg));
 });
 
