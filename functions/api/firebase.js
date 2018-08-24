@@ -36,11 +36,13 @@ function InsertClient(client){
 }
 
 function InsertMessage(message){
-    var channel = '/messages/channel1'; //Quando tiverem varios numeros para enviar mensagem criar lógica aqui.
+    var channel = '/messages'; //Quando tiverem varios numeros para enviar mensagem criar lógica aqui.
     return admin.database()
-            .ref(channel)
+            .ref('/messages')
             .push(message)
             .then((snapshot) => {
+                //console.log(snapshot.key);
+                admin.database().ref('/toSend/channel1/0').set(message);
                 return {
                     status: 200,
                     msg: snapshot
