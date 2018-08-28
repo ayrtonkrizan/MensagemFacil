@@ -3,17 +3,20 @@ const app = require('../config/server');
 const uuid = require('uuid');
 const db = require('./firebase');
 
-
 app.post('/clients', (req, res) =>{ //Quando tiverem varios numeros para enviar mensagem criar lógica aqui.
     var clients = db.clients();
+    while(clients.length === 0){
+        clients = db.clients();
+        console.log(clients.length);
+    }
+    
+
     var client;
     if(!req.body.email)
         return res.status(404).json({ErrorMessage: "Enviar Email"});
     if(!req.body.cpf)
         return res.status(404).json({ErrorMessage: "Enviar CPF"});
 
-    if(clients.length === 0)
-        clients = db.clients();
 
     client = clients[req.body.cpf];
     if(client === undefined){

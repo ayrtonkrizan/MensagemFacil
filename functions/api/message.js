@@ -4,7 +4,12 @@ const db = require('./firebase');
 
 app.post('/message', (req, res) =>{
     var clients = db.clients();
+    while(clients.length === 0){
+        clients = db.clients();
+        console.log(clients.length);
+    }
     
+
     var client = clients[req.body.client];
     if(client === undefined)
         return res.status(404).json({ErrorMessage: "Cliente não encontrado"});

@@ -42,7 +42,7 @@ function InsertMessage(message){
             .push(message)
             .then((snapshot) => {
                 //console.log(snapshot.key);
-                admin.database().ref('/toSend/channel1/0').set(message);
+                admin.database().ref('/toSend/channel1/'+snapshot.key).set(message);
                 return {
                     status: 200,
                     msg: snapshot
